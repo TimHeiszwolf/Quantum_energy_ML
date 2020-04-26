@@ -6,7 +6,7 @@ def generateSpace(coordinatesOfParticles, numberOfSurroundingCells = 4, widthOfC
     
     coordinatesOfParticles is are the coordinates of the particles in the cell. This variable is an array of numpy arrays (vectors).
     numberOfSurroundingCells is the number of cells surrounding the origin cell. So if it is 4 than the total space will be 9 by 9 cells.
-    widthOfCell is the width/size of the cell. So if it is 1.0 than the cell has dimension 1.0x1.0 [length units]^2
+    widthOfCell is the width/size of the cell. So if it is 1.0 than the cell has dimension 1.0x1.0 [length units]^2.
     
     >>> atoms = [np.array([0.3, 0.5]), np.array([0.9, 0.9]), np.array([0.6, 0.4]), np.array([0.5, 0.2])]
     >>> generateSpace(atoms, 1, 1.0, False)

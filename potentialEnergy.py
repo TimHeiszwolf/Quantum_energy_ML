@@ -5,8 +5,8 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     """
     A function which takes take all possible purmutations of triangles within total space which has at least one praticle in the basis cell and then sums the energies of those purmutations.
     
-    otherSpace is a list of vectors of coordinates of particles in outside the basis cell
-    particles is a list of vectors of coordinates of particles in the basis cell
+    otherSpace is a list of vectors of coordinates of particles in outside the basis cell.
+    particles is a list of vectors of coordinates of particles in the basis cell.
     potentialEnergyFunction is a function which takes the lengths of the triangles and produces a energy.
     
     >>> from potentialEnergyPerTrio import *
@@ -48,7 +48,7 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     for i in range(0, len(particles)):
         for j in range(i + 1, len(particles)):
             for k in range(0, len(otherSpace)):
-                # Every possible triangle with two particles in the basis cell
+                # Every possible triangle with two particles in the basis cell.
                 lengths = getTriangleLengths(particles[i], particles[j], otherSpace[k])
                 potentialEnergyTotal = potentialEnergyTotal + potentialEnergyFunction(lengths)
     
