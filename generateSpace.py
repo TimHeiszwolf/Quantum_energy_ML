@@ -2,9 +2,9 @@ import numpy as np
 
 def generateSpace(coordinatesOfParticles, numberOfSurroundingCells = 4, widthOfCell = 1.0):
     """
-    Generates the entire space based on the size of one cell
+    Generates the entire space based on the size of one cell.
     
-    coordinatesOfParticles is are the coordinates of the atoms in the cell. This variable is an array of numpy arrays (vectors).
+    coordinatesOfParticles is are the coordinates of the particles in the cell. This variable is an array of numpy arrays (vectors).
     numberOfSurroundingCells is the number of cells surrounding the origin cell. So if it is 4 than the total space will be 9 by 9 cells.
     widthOfCell is the width/size of the cell. So if it is 1.0 than the cell has dimension 1.0x1.0 [length units]^2
     
@@ -14,15 +14,14 @@ def generateSpace(coordinatesOfParticles, numberOfSurroundingCells = 4, widthOfC
     
     """
     
-    totalSpace = []# The array in which all the atoms (their coordinates) will be placed)
+    totalSpace = []# The array in which all the atoms (their coordinates) will be placed).
     
     for cellCoordinateX in range(-numberOfSurroundingCells, numberOfSurroundingCells + 1):
-        # TODO: Comment
         for cellCoordinateY in range(-numberOfSurroundingCells, numberOfSurroundingCells + 1):
-            # TODO: comment
-            for atom in coordinatesOfParticles:
-                # TODO: Comment
-                totalSpace.append(atom + np.array([cellCoordinateX * widthOfCell, cellCoordinateY * widthOfCell]))
+            # Runs trough all cell coordinates.
+            for particle in coordinatesOfParticles:
+                # Populates all cells with the with the particles in the basis cell.
+                totalSpace.append(particle + np.array([cellCoordinateX * widthOfCell, cellCoordinateY * widthOfCell]))
     
     return totalSpace
 
