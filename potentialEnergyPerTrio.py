@@ -22,8 +22,8 @@ def potentialEnergyPerTrio(lengths):
     s = (a + b + c) / 2
     area2Triangle = s * (s - a) * (s - b) * (s - c)
     
-    longRangePotential = - area2Triangle / (a**12 + b**12 + c**12)
-    shortRangePotential = (a**-2 + b**-2 + c**-2)**4
+    longRangePotential = (a**-8 + b**-8 + c**-8)#(a**-2 + b**-2 + c**-2)**4#(a**-4 + b**-4 + c**-4)**2
+    shortRangePotential = - 1000 * area2Triangle / (a**12 + b**12 + c**12)# - * area2Triangle / (a**12 + b**12 + c**12)
     
     return shortRangePotential + longRangePotential
 

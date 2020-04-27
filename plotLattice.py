@@ -18,7 +18,7 @@ def plotLattice(totalSpace, widthOfCell = 1.0, plotBorders = True):
     
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.scatter(x=toPlot[0], y=toPlot[1], marker='o', c='r')
-    ax.set_title('Position of partiles ')
+    ax.set_title('Position of particles.')
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     
