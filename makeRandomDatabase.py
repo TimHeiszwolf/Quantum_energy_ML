@@ -50,4 +50,3 @@ def makeRandomDatabase(numberOfDatapoints, numberOfSurroundingCells, numberOfPar
         dataDF.to_json(filename + '.json', orient='columns')
     
     return dataDF
-
