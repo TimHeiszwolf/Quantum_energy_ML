@@ -13,7 +13,7 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     >>> from generateSpace import *
     >>> atoms = [np.array([0.3, 0.5]), np.array([0.9, 0.9]), np.array([0.6, 0.4]), np.array([0.5, 0.2])]
     >>> potentialEnergy([], atoms, potentialEnergyPerTrio)
-    2441605.1812992394
+    136960.0450996654
     
     >>> totalSpace = generateSpace(atoms, 0, 1.0)
     >>> potentialEnergy(totalSpace, atoms, potentialEnergyPerTrio) == potentialEnergy([], atoms, potentialEnergyPerTrio)
@@ -21,19 +21,19 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     
     >>> totalSpace = generateSpace(atoms, 1, 1.0, False)
     >>> potentialEnergy([], totalSpace, potentialEnergyPerTrio)
-    88870702.37461296
+    51280138.86453714
     
     >>> totalSpace = generateSpace(atoms, 3, 1.0, False)
     >>> potentialEnergy([], totalSpace, potentialEnergyPerTrio)
-    1926302668.3391948
+    1643749545.0017862
     
     >>> totalSpace = generateSpace(atoms, 1, 1.0)
     >>> potentialEnergy(totalSpace, atoms, potentialEnergyPerTrio)
-    19070318.37682746
+    11266035.281433456
     
     >>> totalSpace = generateSpace(atoms, 3, 1.0)
     >>> potentialEnergy(totalSpace, atoms, potentialEnergyPerTrio)
-    78355980.97411288
+    67061183.336221926
     """
     
     potentialEnergyTotal = 0# np.sum(np.sum(np.sum([[[potentialEnergyFunction(getTriangleLengths(totalSpace[i], totalSpace[j], totalSpace[k])) for k in range(j + 1, len(totalSpace))] for j in range(i + 1, len(totalSpace))] for i in range(0, len(totalSpace))])))# This is the old method.

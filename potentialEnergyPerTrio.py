@@ -3,16 +3,16 @@ def potentialEnergyPerTrio(lengths):
     The (simplified) potential energy based on the lengths of the sides of a triangle (a, b and c).
     
     >>> potentialEnergyPerTrio([1, 1, 1])
-    80.9375
+    -59.5
     
     >>> potentialEnergyPerTrio([0.1, 0.6, 1])
-    115989177.09076478
+    100000084.39174236
     
     >>> potentialEnergyPerTrio([0.01, 0.006, 0.001])
-    1.1598917709076485e+24
+    1.0000008439174239e+24
     
     >>> potentialEnergyPerTrio([0.7211102550927979, 0.36055512754639896, 0.8062257748298549])
-    15477.243602126406
+    3343.025290872988
     """
     
     a = lengths[0]
