@@ -1,6 +1,7 @@
 import numpy as np
 from getTriangleLengths import *
 
+
 def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     """
     A function which takes take all possible purmutations of triangles within total space which has at least one praticle in the basis cell and then sums the energies of those purmutations.
@@ -35,8 +36,7 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     >>> potentialEnergy(totalSpace, atoms, potentialEnergyPerTrio)
     67061183.336221926
     """
-    
-    potentialEnergyTotal = 0# np.sum(np.sum(np.sum([[[potentialEnergyFunction(getTriangleLengths(totalSpace[i], totalSpace[j], totalSpace[k])) for k in range(j + 1, len(totalSpace))] for j in range(i + 1, len(totalSpace))] for i in range(0, len(totalSpace))])))# This is the old method.
+    potentialEnergyTotal = 0
     
     for i in range(0, len(particles)):
         for j in range(0, len(otherSpace)):

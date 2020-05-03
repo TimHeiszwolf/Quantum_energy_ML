@@ -19,15 +19,21 @@ def makeRandomDatabase(numberOfDatapoints, numberOfSurroundingCells, numberOfPar
     """
     A function that generates a random database of particle configurations and their potential energies.
     
+    numberOfDatapoints is the length/amount of datapoints in the final database.
+    numberOfSurroundingCells is the 'depth' of the surrounding cells (in a square) so if it is two then the total grid is five by five cells large.
+    potentialEnergyFunction is a function that takes a list of length 3 consisting of the lengths of the sides of a triangle of three particles.
+    widthOfCellRange is a list of the the range of possible cell widths.
+    filename is the name of the file the database get's exported to. The .json file extension get's added in the code itself. If the type of filename is not a string no file will be saved.
+    giveUpdates is a boolean which determines if updates about the progress of the database generation get's printed.
     """
     if giveUpdates:
         # Give the user some information and estimates about the amount of calculation and time needed.
-        secondsPerDatapoint = 15 * (10**-6) * numberOfCalculations(numberOfSurroundingCells, numberOfParticlesPerCell)
-        print('Predicted amount of calculations:', int(numberOfDatapoints * numberOfCalculations(numberOfSurroundingCells, numberOfParticlesPerCell)), 'for ', numberOfDatapoints, 'datapoints.')
+        secondsPerDatapoint = 15 * (10**-6) * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)
+        print('Predicted amount of calculations:', int(numberOfDatapoints * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)), 'for ', numberOfDatapoints, 'datapoints.')
         print('Assuming 15 us per calculation, estimated time needed:', math.ceil(numberOfDatapoints * secondsPerDatapoint), 'seconds')
         startTime = time.time()
     
-    data = {'particleCoordinates': [],'widthOfCell':[] , 'numberOfSurroundingCells': [], 'potentialEnergy':[]}
+    data = {'particleCoordinates': [],'widthOfCell':[] , 'numberOfSurroundingCells': [], 'potentialEnergy':[]}# Initialy use a dictionary because it's easier to append to than a dataframe.
     
     for i in range(0, numberOfDatapoints):
         # Generate the required number of datapoints.
@@ -40,7 +46,7 @@ def makeRandomDatabase(numberOfDatapoints, numberOfSurroundingCells, numberOfPar
         data['potentialEnergy'].append(potentialEnergy(otherSpace, particles, potentialEnergyFunction))# Calculate the potential energy and save it to the data dictonairy.
         
         if giveUpdates:
-            print(str(math.ceil(100 * (i + 1) / (numberOfDatapoints ))).rjust(3, ' '), '% done, time left', math.ceil((numberOfDatapoints - i - 1) * secondsPerDatapoint), 'seconds,', math.ceil(time.time() - startTime), 'seconds since start.')# Inform the user of the progress.
+            print(str(math.ceil(100 * (i + 1) / (numberOfDatapoints))).rjust(3, ' '), '% done, expected time left', math.ceil((numberOfDatapoints - i - 1) * secondsPerDatapoint), 'seconds,', math.ceil(time.time() - startTime), 'seconds since start.')# Inform the user of the progress.
     
     if giveUpdates:
         endTime = time.time()
@@ -59,24 +65,23 @@ def makeRandomDatabaseSingleQueue(q, numberOfDatapoints, numberOfSurroundingCell
     q.put(makeRandomDatabase(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCellRange, False, giveUpdates))
 
 
-def makeRandomDatabaseMultiprocessing(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCellRange = [1, 1], filename = False, amountOfProcesses = 4):
+def makeRandomDatabaseMultiprocessing(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCellRange = [1, 1], filename = False, amountOfProcesses = 5):
     """
     A function that impliments multiprocessing for the generation of the database.
     """
-    #https://stackoverflow.com/questions/1182315/python-multicore-processing#1182350
     q = Queue()
     
     processes = []
     print('Using multiprocessing only the first procces gives updates')
     processes.append(Process(target = makeRandomDatabaseSingleQueue, args = (q, math.ceil(numberOfDatapoints / amountOfProcesses), numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCellRange, True)))
+    
     for i in range(0, amountOfProcesses - 1):
         processes.append(Process(target = makeRandomDatabaseSingleQueue, args = (q, math.ceil(numberOfDatapoints / amountOfProcesses), numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCellRange, False)))
     
     for i in processes:
         i.start()
-    time.sleep(5)
     
-    dataDF =pd.concat([q.get() for i in range(0, amountOfProcesses)], ignore_index=True, sort =False)
+    dataDF = pd.concat([q.get() for i in range(0, amountOfProcesses)], ignore_index = True, sort = False)
     
     if type(filename) == str:
         # If wanted save the data to a json file.

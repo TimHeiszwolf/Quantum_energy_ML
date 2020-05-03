@@ -1,4 +1,4 @@
-def numberOfCalculations(numberOfSurroundingCells, numberOfParticlesPerCell = 4):
+def numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell = 4):
     """
     Calculates the number of triangles/calculations needed to calculate the potential energy of a system. Can be used to predict calculation time.
     """

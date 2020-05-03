@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
 from generateSpace import *
 
+
 def plotLattice(totalSpace, widthOfCell = 1.0, plotBorders = True):
     """
     Plots the lattice/space in a scatter graph with the grid as cell borders.
@@ -12,9 +13,7 @@ def plotLattice(totalSpace, widthOfCell = 1.0, plotBorders = True):
     widthOfCell is the width/size of the cell. So if it is 1.0 than the cell has dimension 1.0x1.0 [length units]^2
     plotBorders is a boolean representing wether or not borders of the cells are plotted.
     """
-    
     toPlot = [[totalSpace[j][i] for j in range(len(totalSpace))] for i in range(len(totalSpace[0]))] # Transposing totalSpace such that the toPlot[0] are all the x coordinates, toPlot[1] are the y coordinates, etc.
-    
     
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.scatter(x=toPlot[0], y=toPlot[1], marker='o', c='r')
@@ -39,6 +38,7 @@ def plotLattice(totalSpace, widthOfCell = 1.0, plotBorders = True):
     plt.show()
     
     return ax
+
 
 def plotLatticeFromDataFrame(dataFrame, indexNumber, plotBorders = True):
     """

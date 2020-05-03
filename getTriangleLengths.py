@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def getTriangleLengths(vector1, vector2, vector3):
     """
     Gets the lengths of the sides of the triangles based on the vectors pointing towards each of the vertices.
@@ -7,7 +8,6 @@ def getTriangleLengths(vector1, vector2, vector3):
     >>> getTriangleLengths(np.array([1,1]), np.array([2,-5]) ,np.array([0.4,3]))
     [6.082762530298219, 2.08806130178211, 8.158431221748456]
     """
-    
     veca = vector1 - vector2
     vecb = vector1 - vector3
     vecc = vector2 - vector3
@@ -17,6 +17,7 @@ def getTriangleLengths(vector1, vector2, vector3):
     c = np.sqrt(vecc.dot(vecc))
     
     return [a, b, c]
+
 
 if __name__ == "__main__":
     import doctest

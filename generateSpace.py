@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def generateSpace(coordinatesOfParticles, numberOfSurroundingCells = 4, widthOfCell = 1.0, withoutBasisCell = True):
     """
     Generates the entire space based on the size of one cell.
@@ -16,7 +17,6 @@ def generateSpace(coordinatesOfParticles, numberOfSurroundingCells = 4, widthOfC
     >>> generateSpace(atoms, 1, 1.0)
     [array([-0.7, -0.5]), array([-0.1, -0.1]), array([-0.4, -0.6]), array([-0.5, -0.8]), array([-0.7,  0.5]), array([-0.1,  0.9]), array([-0.4,  0.4]), array([-0.5,  0.2]), array([-0.7,  1.5]), array([-0.1,  1.9]), array([-0.4,  1.4]), array([-0.5,  1.2]), array([ 0.3, -0.5]), array([ 0.9, -0.1]), array([ 0.6, -0.6]), array([ 0.5, -0.8]), array([0.3, 1.5]), array([0.9, 1.9]), array([0.6, 1.4]), array([0.5, 1.2]), array([ 1.3, -0.5]), array([ 1.9, -0.1]), array([ 1.6, -0.6]), array([ 1.5, -0.8]), array([1.3, 0.5]), array([1.9, 0.9]), array([1.6, 0.4]), array([1.5, 0.2]), array([1.3, 1.5]), array([1.9, 1.9]), array([1.6, 1.4]), array([1.5, 1.2])]
     """
-    
     totalSpace = []# The array in which all the atoms (their coordinates) will be placed).
     
     for cellCoordinateX in range(-numberOfSurroundingCells, numberOfSurroundingCells + 1):

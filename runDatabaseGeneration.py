@@ -18,12 +18,12 @@ from makeRandomDatabase import *
 
 
 def main():
-    numberOfDatapoints = 2500
+    numberOfDatapoints = 40000
     numberOfSurroundingCells = 4
     numberOfParticlesPerCell = 4
     potentialEnergyFunction = potentialEnergyPerTrio# Set the potential energy function of the data base as a function.
     widthOfCell = [0.5, 50]# The width of a singe cell.
-    filename = 'Database1_5'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    filename = 'Database1_8_40k'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
     
     if input('Do you want to use multiprocessing? (Y/N): ').lower()=='y':
         # Asks the user if multiprocessing is wanted.
@@ -39,6 +39,7 @@ def main():
         data = makeRandomDatabase(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename)
     
     print('\n Done generating database now analysing \n')
+    print(data.head(), '\n')
     print(data.describe())
     print('\n Now plotting historgrams \n')
     

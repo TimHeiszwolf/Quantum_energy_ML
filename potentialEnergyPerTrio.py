@@ -14,7 +14,6 @@ def potentialEnergyPerTrio(lengths):
     >>> potentialEnergyPerTrio([0.7211102550927979, 0.36055512754639896, 0.8062257748298549])
     3343.025290872988
     """
-    
     a = lengths[0]
     b = lengths[1]
     c = lengths[2]
@@ -26,6 +25,7 @@ def potentialEnergyPerTrio(lengths):
     shortRangePotential = - 1000 * area2Triangle / (a**12 + b**12 + c**12)# - * area2Triangle / (a**12 + b**12 + c**12)
     
     return shortRangePotential + longRangePotential
+
 
 if __name__ == "__main__":
     import doctest
