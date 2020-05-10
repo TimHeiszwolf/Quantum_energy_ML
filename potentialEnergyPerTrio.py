@@ -1,28 +1,31 @@
+import math
+
+
 def potentialEnergyPerTrio(lengths):
     """
     The (simplified) potential energy based on the lengths of the sides of a triangle (a, b and c).
     
     >>> potentialEnergyPerTrio([1, 1, 1])
-    -59.5
+    -0.013417421124828532
     
     >>> potentialEnergyPerTrio([0.1, 0.6, 1])
-    100000084.39174236
+    9999.59176181373
     
     >>> potentialEnergyPerTrio([0.01, 0.006, 0.001])
-    1.0000008439174239e+24
+    1.0000006012312612e+20
     
     >>> potentialEnergyPerTrio([0.7211102550927979, 0.36055512754639896, 0.8062257748298549])
-    3343.025290872988
+    0.13118489703592645
     """
     a = lengths[0]
     b = lengths[1]
     c = lengths[2]
     
-    s = (a + b + c) / 2
-    area2Triangle = s * (s - a) * (s - b) * (s - c)
+    #s = (a + b + c) / 2
+    #area2Triangle = s * (s - a) * (s - b) * (s - c)
     
-    longRangePotential = (a**-8 + b**-8 + c**-8)#(a**-2 + b**-2 + c**-2)**4#(a**-4 + b**-4 + c**-4)**2
-    shortRangePotential = - 1000 * area2Triangle / (a**12 + b**12 + c**12)# - * area2Triangle / (a**12 + b**12 + c**12)
+    longRangePotential = - 10 * ((a + b + c)**-6)#- 500 * math.exp(-(a + b + c)*2)#-10 *(a + b + c)**-8
+    shortRangePotential = (a**-8 + b**-8 + c**-8) / 10000#(a**-6+b**-6+c**-6)/1000#(a + b + c)**-10
     
     return shortRangePotential + longRangePotential
 

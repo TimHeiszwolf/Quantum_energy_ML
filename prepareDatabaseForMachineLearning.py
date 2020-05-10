@@ -59,7 +59,8 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, filename = False, give
                     matrix[i][j] = matrix[j][i]
             
             eigenvalue, eigenVector = np.linalg.eig(matrix)
-            eigenvaluesRow.append(eigenvalue)
+            [eigenvaluesRow.append(i) for i in eigenvalue]
+            #eigenvaluesRow.append(eigenvalue)
         
         eigenvalues.append(eigenvaluesRow)
         

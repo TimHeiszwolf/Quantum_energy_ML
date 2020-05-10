@@ -28,9 +28,9 @@ def makeRandomDatabase(numberOfDatapoints, numberOfSurroundingCells, numberOfPar
     """
     if giveUpdates:
         # Give the user some information and estimates about the amount of calculation and time needed.
-        secondsPerDatapoint = 15 * (10**-6) * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)
-        print('Predicted amount of calculations:', int(numberOfDatapoints * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)), 'for ', numberOfDatapoints, 'datapoints.')
-        print('Assuming 15 us per calculation, estimated time needed:', math.ceil(numberOfDatapoints * secondsPerDatapoint), 'seconds')
+        secondsPerDatapoint = 19 * (10**-6) * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)
+        print('Predicted amount of calculations:', int(numberOfDatapoints * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)), 'for', numberOfDatapoints, 'datapoints.')
+        print('Assuming 19 us per calculation, estimated time needed:', math.ceil(numberOfDatapoints * secondsPerDatapoint), 'seconds')
         startTime = time.time()
     
     data = {'particleCoordinates': [],'widthOfCell':[] , 'numberOfSurroundingCells': [], 'potentialEnergy':[]}# Initialy use a dictionary because it's easier to append to than a dataframe.
@@ -38,7 +38,7 @@ def makeRandomDatabase(numberOfDatapoints, numberOfSurroundingCells, numberOfPar
     for i in range(0, numberOfDatapoints):
         # Generate the required number of datapoints.
         widthOfCell = random.uniform(widthOfCellRange[0], widthOfCellRange[1])
-        particles = [np.array([random.uniform(0, widthOfCell), random.uniform(0, widthOfCell)]) for j in range(0, numberOfParticlesPerCell)]# Make a randomised basis cell of the correct size.
+        particles = [np.array([random.uniform(0, widthOfCell), random.uniform(0, widthOfCell)]) for j in range(0, numberOfParticlesPerCell)]# Make a randomised basis cell of the correct size. #[np.array([random.uniform(0.5 * widthOfCell, widthOfCell), random.uniform(0, 0.5* widthOfCell)]), np.array([random.uniform(0, 0.5* widthOfCell), random.uniform(0, 0.5* widthOfCell)]), np.array([random.uniform(0, 0.5* widthOfCell), random.uniform(0.5 * widthOfCell, widthOfCell)]), np.array([random.uniform(0.5 * widthOfCell, widthOfCell), random.uniform(0.5 * widthOfCell, widthOfCell)])]
         otherSpace = generateSpace(particles, numberOfSurroundingCells, widthOfCell)# Generate the other space.
         data['particleCoordinates'].append(particles)
         data['widthOfCell'].append(widthOfCell)

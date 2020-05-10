@@ -14,7 +14,7 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     >>> from generateSpace import *
     >>> atoms = [np.array([0.3, 0.5]), np.array([0.9, 0.9]), np.array([0.6, 0.4]), np.array([0.5, 0.2])]
     >>> potentialEnergy([], atoms, potentialEnergyPerTrio)
-    136960.0450996654
+    14.60995448990894
     
     >>> totalSpace = generateSpace(atoms, 0, 1.0)
     >>> potentialEnergy(totalSpace, atoms, potentialEnergyPerTrio) == potentialEnergy([], atoms, potentialEnergyPerTrio)
@@ -22,19 +22,19 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     
     >>> totalSpace = generateSpace(atoms, 1, 1.0, False)
     >>> potentialEnergy([], totalSpace, potentialEnergyPerTrio)
-    51280138.86453714
+    5066.384755205316
     
     >>> totalSpace = generateSpace(atoms, 3, 1.0, False)
     >>> potentialEnergy([], totalSpace, potentialEnergyPerTrio)
-    1643749545.0017862
+    163838.31816528642
     
     >>> totalSpace = generateSpace(atoms, 1, 1.0)
     >>> potentialEnergy(totalSpace, atoms, potentialEnergyPerTrio)
-    11266035.281433456
+    1099.0147626316011
     
     >>> totalSpace = generateSpace(atoms, 3, 1.0)
     >>> potentialEnergy(totalSpace, atoms, potentialEnergyPerTrio)
-    67061183.336221926
+    6670.964373846484
     """
     potentialEnergyTotal = 0
     

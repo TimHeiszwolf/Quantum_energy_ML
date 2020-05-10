@@ -18,12 +18,12 @@ from makeRandomDatabase import *
 
 
 def main():
-    numberOfDatapoints = 40000
+    numberOfDatapoints =  20000
     numberOfSurroundingCells = 4
     numberOfParticlesPerCell = 4
     potentialEnergyFunction = potentialEnergyPerTrio# Set the potential energy function of the data base as a function.
-    widthOfCell = [0.5, 50]# The width of a singe cell.
-    filename = 'Database1_8_40k'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    widthOfCell = [1, 50]# The width of a singe cell.
+    filename = 'database10_20k'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
     
     if input('Do you want to use multiprocessing? (Y/N): ').lower()=='y':
         # Asks the user if multiprocessing is wanted.
@@ -44,26 +44,27 @@ def main():
     print('\n Now plotting historgrams \n')
     
     ## The code below is for plotting diagrams.
-    # Filter the data for the logarithmic historgram.
-    qLow = data['potentialEnergy'].quantile(0)
+    # Filter the data for the percentile plot.
+    qLow = data['potentialEnergy'].quantile(0.01)
     qHi  = data['potentialEnergy'].quantile(0.99)
     dataFiltered = data[(data['potentialEnergy'] < qHi) & (data['potentialEnergy'] > qLow)]
     x = dataFiltered['potentialEnergy']
-    bins = [5**i for i in range(math.floor(math.log(min(x)) / math.log(5)) - 4, 26)]
+    bins = [5**i for i in range(math.floor(math.log(max(min(x), 10**-30)) / math.log(5)) - 4, 26)]
     
-    # Make the logarithmic historgram.
+    # Make the percentile plot.
     fig, ax = plt.subplots(figsize=(8, 8))
-    n, bins, patches = ax.hist(x, bins = bins, facecolor='blue', alpha=0.5)
-    ax.set_xscale('log')
-    ax.set_xlim(max(math.floor(math.log(min(x)) / math.log(10)), 10**-6), math.pow(10, 1 + math.ceil(math.log(max(x)) / math.log(10))))
-    ax.set_title('Histogram (logarithmic) of distribution of energy per particle.')
-    ax.set_xlabel('Energy per particle')
-    ax.set_ylabel('Count')
+    sortedX = np.sort(x) + 1.01 * abs(min(x))
+    ax.plot([100*i/len(x) for i in range(0, len(x))], sortedX)# LEOTOJGIOPHJNEIONPGENIOKGHNOIKEGINOLKGENKJLEGKINLOGENKLGELKNGLNIK
+    ax.set_xlim(0, 100)
+    ax.set_yscale('log')
+    ax.set_title('Plot of the energy per particle for each percentile.')
+    ax.set_ylabel('Energy per particle')
+    ax.set_xlabel('Percentile')
     plt.show()
     
     # Filter the data for the normal historgram.
-    qLow = data['potentialEnergy'].quantile(0.001)
-    qHi  = data['potentialEnergy'].quantile(0.80)
+    qLow = data['potentialEnergy'].quantile(0.10)
+    qHi  = data['potentialEnergy'].quantile(0.90)
     dataFiltered = data[(data['potentialEnergy'] < qHi) & (data['potentialEnergy'] > qLow)]
     x = dataFiltered['potentialEnergy']
     numBins = 1000
