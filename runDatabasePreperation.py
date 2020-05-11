@@ -19,7 +19,7 @@ from prepareDatabaseForMachineLearning import*
 
 
 def main():
-    filename = 'combinedData'# The name of the file which you want to prepare for machine learning.
+    filename = 'testCombined'#'combinedData'# The name of the file which you want to prepare for machine learning.
     orderOfMatrix = [-1, -2]# The order of the matrices you want to make.
     
     data = pd.read_json(filename + '.json', orient='columns')
