@@ -19,8 +19,9 @@ from prepareDatabaseForMachineLearning import*
 
 
 def main():
-    filename = 'testCombined'#'combinedData'# The name of the file which you want to prepare for machine learning.
+    filename = 'combinedData'# The name of the file which you want to prepare for machine learning.
     orderOfMatrix = [-1, -2]# The order of the matrices you want to make.
+    R0 = 100
     
     data = pd.read_json(filename + '.json', orient='columns')
     data['particleCoordinates'] = data['particleCoordinates'].apply(np.array)
@@ -33,10 +34,10 @@ def main():
             amountOfProcesses = int(input('How many processes should start? (int): '))
             
         print('Starting multiprocessing.')
-        data = prepareDatabseForMachineLearningMultiprocessing(data, orderOfMatrix, filename + 'Prepared', amountOfProcesses)
+        data = prepareDatabseForMachineLearningMultiprocessing(data, orderOfMatrix, R0, filename + 'Prepared', amountOfProcesses)
     else:
         print('Starting singleprocessing.')
-        data = prepareDatabseForMachineLearning(data, orderOfMatrix, filename + 'Prepared')
+        data = prepareDatabseForMachineLearning(data, orderOfMatrix, R0, filename + 'Prepared')
     
     print('\nDone preparing database now analysing.\n')
     print(data.head(), '\n')

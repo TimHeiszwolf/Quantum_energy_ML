@@ -6,7 +6,7 @@ import math
 from multiprocessing import Process, Queue
 
 
-def prepareDatabseForMachineLearning(data, orderOfMatrix, filename = False, giveUpdates = True):
+def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = False, giveUpdates = True):
     """
     A function which takes a generated dataframe and prepares it for machine learning by making the proximity matrices and calculating their eigenvalues.
     
@@ -26,7 +26,7 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, filename = False, give
         # Loop trough each datapoint
         coordinates = data['particleCoordinates'][a]
         widthOfCell = data['widthOfCell'][a]
-        numberOfSurroundingCells = data['numberOfSurroundingCells'][a]
+        numberOfSurroundingCells = math.ceil(R0 / widthOfCell + 1)#data['numberOfSurroundingCells'][a]
         
         eigenvaluesRow = []
         
@@ -48,8 +48,10 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, filename = False, give
                             vectorA = coordinates[i]
                             vectorB = coordinates[j] + np.array([x * widthOfCell, y * widthOfCell])
                             differenceVector = vectorA - vectorB
-                            
-                            sumOfProximity = sumOfProximity + math.pow(differenceVector.dot(differenceVector), (order/2))
+                            distance = np.sqrt(differenceVector.dot(differenceVector))
+                            #sumOfProximity = sumOfProximity + math.pow(differenceVector.dot(differenceVector), (order/2))
+                            if distance < R0:
+                                sumOfProximity = sumOfProximity + ((R0 / distance) - (distance / R0))**(-order)
                         
                     matrix[i][j] = sumOfProximity
             
@@ -77,11 +79,11 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, filename = False, give
     return data
 
 
-def prepareDatabseForMachineLearningSingleQueue(q, data, orderOfMatrix, giveUpdates):
-    q.put(prepareDatabseForMachineLearning(data, orderOfMatrix, False, giveUpdates))
+def prepareDatabseForMachineLearningSingleQueue(q, data, orderOfMatrix, R0, giveUpdates):
+    q.put(prepareDatabseForMachineLearning(data, orderOfMatrix, R0, False, giveUpdates))
 
 
-def prepareDatabseForMachineLearningMultiprocessing(data, orderOfMatrix, filename = False, amountOfProcesses = 5):
+def prepareDatabseForMachineLearningMultiprocessing(data, orderOfMatrix, R0=4.0, filename = False, amountOfProcesses = 5):
     """
     A function which impliments multiprocessing for the prepareDatabseForMachineLearning function.
     """
@@ -90,10 +92,10 @@ def prepareDatabseForMachineLearningMultiprocessing(data, orderOfMatrix, filenam
     splitData = np.array_split(data, amountOfProcesses)
     print('Using multiprocessing only the first procces gives updates')
     
-    processes.append(Process(target = prepareDatabseForMachineLearningSingleQueue, args = (q, splitData[0], orderOfMatrix, True)))
+    processes.append(Process(target = prepareDatabseForMachineLearningSingleQueue, args = (q, splitData[0], orderOfMatrix, R0, True)))
     
     for i in range(1, amountOfProcesses):
-        processes.append(Process(target = prepareDatabseForMachineLearningSingleQueue, args = (q, splitData[i], orderOfMatrix, False)))
+        processes.append(Process(target = prepareDatabseForMachineLearningSingleQueue, args = (q, splitData[i], orderOfMatrix, R0, False)))
         
     for i in processes:
         i.start()
