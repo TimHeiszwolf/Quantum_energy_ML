@@ -18,12 +18,12 @@ from makeRandomDatabase import *
 
 
 def main():
-    numberOfDatapoints =  20000
+    numberOfDatapoints =  100000
     numberOfSurroundingCells = 4
     numberOfParticlesPerCell = 4
     potentialEnergyFunction = potentialEnergyPerTrio# Set the potential energy function of the data base as a function.
-    widthOfCell = [1, 50]# The width of a singe cell.
-    filename = 'database11_20k'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    widthOfCell = [5, 250]# The width of a singe cell.
+    filename = 'database2_100k'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
     
     if input('Do you want to use multiprocessing? (Y/N): ').lower()=='y':
         # Asks the user if multiprocessing is wanted.

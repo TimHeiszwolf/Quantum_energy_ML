@@ -61,9 +61,10 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
                     matrix[i][j] = matrix[j][i]
             
             eigenvalue, eigenVector = np.linalg.eig(matrix)
-            [eigenvaluesRow.append(i) for i in eigenvalue]
-            #eigenvaluesRow.append(eigenvalue)
+            [eigenvaluesRow.append(i) for i in sorted(eigenvalue)]
+            #[eigenvaluesRow.append(i) for i in eigenvalue]
         
+        #eigenvalues.append(sorted(eigenvaluesRow))
         eigenvalues.append(eigenvaluesRow)
         
         if giveUpdates:

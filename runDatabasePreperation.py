@@ -19,9 +19,9 @@ from prepareDatabaseForMachineLearning import*
 
 
 def main():
-    filename = 'combinedData'# The name of the file which you want to prepare for machine learning.
-    orderOfMatrix = [-1, -2]# The order of the matrices you want to make.
-    R0 = 100
+    filename = 'CombinedDataR500M1M2M3'# The name of the file which you want to prepare for machine learning.
+    orderOfMatrix = [-1, -2, -3]# The order of the matrices you want to make.
+    R0 = 500
     
     data = pd.read_json(filename + '.json', orient='columns')
     data['particleCoordinates'] = data['particleCoordinates'].apply(np.array)
