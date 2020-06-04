@@ -18,31 +18,43 @@ from makeRandomDatabase import *
 
 
 def main():
+    # General settings for each method.
     numberOfDatapoints =  100000
-    numberOfSurroundingCells = 4
+    numberOfSurroundingCells = 2
     numberOfParticlesPerCell = 4
     numberOfDimensions = 2
     potentialEnergyFunction = potentialEnergyPerTrio# Set the potential energy function of the data base as a function.
-    widthOfCell = [1, 50]# The width of a singe cell.
+    widthOfCell = [2, 20]# The width of a singe cell.
+    filename = 'databaseFilter_cut0.5_widths97_Width2-20_data100k_CirCirHighO_2sur'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    
+    # Settings filter and minimum method
     cutoff = 0.5
-    numberOfWidths = 197
-    filename = 'databaseFilter_0.5_197_1-50_100k'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    numberOfWidths = 73
+    
+    # Settings minimum method
+    amountOfEpochs = 4
+    maxDeltaPerEpoch = 0.1
+    descentNumberOfSurroundingCells = 2
     
     amountOfProcesses = False
     while (not (type(amountOfProcesses) == int)):
         # Keeps asking the user for the amountOfProcesses until it is a int.
         amountOfProcesses = int(input('How many processes should start? (int): '))
     
-    typeOfProcces = False
-    while (not (typeOfProcces == 'y' or typeOfProcces == 'n')):
+    typeOfProcces = 'none'
+    while (not (typeOfProcces == 'filter' or typeOfProcces == 'random' or typeOfProcces == 'minimum')):
         # Keeps asking the user for the amountOfProcesses until it is a int.
-        typeOfProcces = input('Use alternative method? (Y/N): ').lower()
+        typeOfProcces = input('Which method? (Filter/Random/Minimum): ').lower()
     
-    if typeOfProcces == 'y':
+    if typeOfProcces == 'filter':
         data = makeRandomDatabaseFilterMultiprocessing(math.ceil(numberOfDatapoints / cutoff), numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, amountOfProcesses, numberOfDimensions, numberOfWidths, cutoff)
-        #data = makeRandomDatabaseFilter(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, numberOfWidths=numberOfWidths, cutoff=cutoff)
-    else:
+    elif typeOfProcces == 'random':
         data = makeRandomDatabaseMultiprocessing(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, amountOfProcesses, numberOfDimensions)
+    elif typeOfProcces == 'minimum':
+        data = makeRandomDatabaseMinimumMultiprocessing(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, amountOfProcesses, numberOfDimensions, numberOfWidths, cutoff, amountOfEpochs, maxDeltaPerEpoch, descentNumberOfSurroundingCells)
+        #data = makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, True, numberOfDimensions, numberOfWidths, cutoff, amountOfEpochs, maxDeltaPerEpoch, descentNumberOfSurroundingCells)
+    else:
+        print('You did something wrong, you should be able to see this print.')
     
     print('\n Done generating database now analysing \n')
     print(data.head(), '\n')

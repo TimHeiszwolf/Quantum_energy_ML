@@ -1,7 +1,8 @@
 import math
+import numpy as np
 
 
-def potentialEnergyPerTrio(lengths, strengthShortRange=1):
+def potentialEnergyPerTrio(lengths, E0=1, Rc=1):
     """
     The (simplified) potential energy based on the lengths of the sides of a triangle (a, b and c).
     
@@ -20,18 +21,20 @@ def potentialEnergyPerTrio(lengths, strengthShortRange=1):
     >>> potentialEnergyPerTrio([1, 1, 1])
     -13.83088344325057
     """
-    a = lengths[0]
-    b = lengths[1]
-    c = lengths[2]
+    Mc = 1/3
+    A0 = 4
+    
+    a = Mc * lengths[0] / Rc
+    b = Mc * lengths[1] / Rc
+    c = Mc * lengths[2] / Rc
     
     #s = (a + b + c) / 2
     #area2Triangle = s * (s - a) * (s - b) * (s - c)
     
-    shortRangePotential = strengthShortRange * (a**-8 + b**-8 + c**-8)
-    longRangePotential = -2916 * strengthShortRange * ((a + b + c)**-6)
+    longRangePotential = -((a + b + c)**-10)
+    shortRangePotential = longRangePotential**2
     
-    return (shortRangePotential + longRangePotential)
-
+    return E0 * A0 * (shortRangePotential + longRangePotential)
 
 if __name__ == "__main__":
     import doctest
