@@ -58,6 +58,15 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
                 # Every possible triangle within the basis cell.
                 lengths = getTriangleLengths(particles[i], particles[j], particles[k])
                 potentialEnergyTotal = potentialEnergyTotal + potentialEnergyFunction(lengths)
+                
+    #"""
+    for i in range(0, len(otherSpace)):
+        for j in range(i + 1, len(otherSpace)):
+            for k in range(j + 1, len(otherSpace)):
+                # Every possible triangle outside the basis cell.
+                lengths = getTriangleLengths(otherSpace[i], otherSpace[j], otherSpace[k])
+                potentialEnergyTotal = potentialEnergyTotal + potentialEnergyFunction(lengths)
+    #"""
     
     return potentialEnergyTotal
 

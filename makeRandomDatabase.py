@@ -268,6 +268,7 @@ def makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numb
                 # The monte carlo part in which diffrent
                 for particleNumber in range(len(data['particleCoordinates'][i])):
                     newCoordinates = np.copy(data['particleCoordinates'][i])
+                    #newCoordinates[particleNumber] = newCoordinates[particleNumber] + np.array([maxDeltaPerEpoch * random.uniform(-1, 1) for a in range(0, numberOfDimensions)])
                     direction = random.randint(0, numberOfDimensions - 1)
                     newCoordinates[particleNumber][direction] = newCoordinates[particleNumber][direction] + maxDeltaPerEpoch * random.uniform(-1, 1)
                     

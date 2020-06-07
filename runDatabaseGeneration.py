@@ -19,22 +19,22 @@ from makeRandomDatabase import *
 
 def main():
     # General settings for each method.
-    numberOfDatapoints =  100000
+    numberOfDatapoints = 25000
     numberOfSurroundingCells = 2
     numberOfParticlesPerCell = 4
     numberOfDimensions = 2
     potentialEnergyFunction = potentialEnergyPerTrio# Set the potential energy function of the data base as a function.
     widthOfCell = [2, 20]# The width of a singe cell.
-    filename = 'databaseFilter_cut0.5_widths97_Width2-20_data100k_CirCirHighO_2sur'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    filename = 'databaseFilter_cut0.5_widths73_Width2-20_data25k_CirCirHighO_2sur'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
     
     # Settings filter and minimum method
     cutoff = 0.5
     numberOfWidths = 73
     
     # Settings minimum method
-    amountOfEpochs = 4
+    amountOfEpochs = 30
     maxDeltaPerEpoch = 0.1
-    descentNumberOfSurroundingCells = 2
+    descentNumberOfSurroundingCells = 1
     
     amountOfProcesses = False
     while (not (type(amountOfProcesses) == int)):
@@ -88,8 +88,8 @@ def main():
     numBins = 1000
     
     # Making a plot by width of cell
-    if typeOfProcces=='y':
-        tempData = dataFiltered
+    if typeOfProcces == 'minimum' or typeOfProcces == 'filter':
+        tempData = dataFiltered.copy()
         tempOfsett = 1.01 * min(tempData['potentialEnergy'])
         tempData['potentialEnergy'] = tempData['potentialEnergy'] - tempOfsett
         medianData = tempData.groupby('widthOfCell').describe(percentiles=[0.05, 0.5, 0.95])
@@ -115,7 +115,8 @@ def main():
     amountToPlot = min([10, numberOfDatapoints])
     if input('Want to plot ' + str(amountToPlot) + ' lattices? (Y/N): ').lower() == 'y':
         # Plotting the lattices if wanted.
-        for i in range(0, amountToPlot):
+        for loop in range(0, amountToPlot):
+            i = random.randint(0, numberOfDatapoints - 1)
             print('Plotting datapoint ', i, ' with energy ', data['potentialEnergy'][i])
             plotLatticeFromDataFrame(data, i)
 

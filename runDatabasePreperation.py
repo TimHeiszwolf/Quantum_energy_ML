@@ -19,9 +19,9 @@ from prepareDatabaseForMachineLearning import*
 
 
 def main():
-    filename = 'databaseFilter_0.5_197_1-25_50k_AreaCirHighO'# The name of the file which you want to prepare for machine learning.
+    filename = 'databaseFilter_cut0.5_widths73_Width2-20_data100k_CirCirHighO_2sur'# The name of the file which you want to prepare for machine learning.
     orderOfMatrix = [-2, -3, -4, -5]# The order of the matrices you want to make.
-    R0 = 50
+    R0 = 40
     
     data = pd.read_json(filename + '.json', orient='columns')
     data['particleCoordinates'] = data['particleCoordinates'].apply(np.array)
