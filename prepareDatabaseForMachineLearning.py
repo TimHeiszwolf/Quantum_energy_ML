@@ -21,6 +21,7 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
     data = data.reset_index()
     numberOfDatapoints = len(data['particleCoordinates'])
     eigenvalues = []
+    relativeDistances = []
     
     for a in range(0, numberOfDatapoints):
         # Loop trough each datapoint
@@ -29,14 +30,22 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
         numberOfSurroundingCells = math.ceil(R0 / widthOfCell + 1)#data['numberOfSurroundingCells'][a]
         
         eigenvaluesRow = []
+        relativeDistancesRow = [widthOfCell]
         
         for order in orderOfMatrix:
             matrix = np.zeros((len(coordinates), len(coordinates)))
+            relativeDistancesRowOrder = []
             
             for i in range(0, len(coordinates)):
                 for j in range(i, len(coordinates)):
-                    # Loop trough all matrix elements and define their proximity.
+                    # Loop trough all matrix elements and define their proximity and relative distances.
                     sumOfProximity = 0
+                    
+                    if (not i==j):
+                        vectorA = coordinates[i]
+                        vectorB = coordinates[j]
+                        differenceVector = vectorA - vectorB
+                        relativeDistancesRowOrder.append(np.sqrt(differenceVector.dot(differenceVector))**(-order))
                     
                     for x in range(-numberOfSurroundingCells, numberOfSurroundingCells + 1):
                         for y in range(-numberOfSurroundingCells, numberOfSurroundingCells + 1):
@@ -63,15 +72,19 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
             eigenvalue, eigenVector = np.linalg.eig(matrix)
             [eigenvaluesRow.append(i) for i in sorted(eigenvalue)]
             #[eigenvaluesRow.append(i) for i in eigenvalue]
+            
+            [relativeDistancesRow.append(i) for i in sorted(relativeDistancesRowOrder)]
         
         #eigenvalues.append(sorted(eigenvaluesRow))
         eigenvalues.append(eigenvaluesRow)
+        relativeDistances.append(relativeDistancesRow)
         
         if giveUpdates:
             expectedTimeLeft = (numberOfDatapoints - 1 - a) / ((a + 1) / (time.time() - timeStart))
             print(str(math.ceil(100 * (a + 1) / (numberOfDatapoints))).rjust(3, ' '), '% done, expected time left', math.ceil(expectedTimeLeft), 'seconds,', math.ceil(time.time() - timeStart), 'seconds since start.')
     
     data['eigenvalues'] = eigenvalues
+    data['relativeDistances'] = relativeDistances
     
     if type(filename) == str:
         # If wanted save the data to a json file.

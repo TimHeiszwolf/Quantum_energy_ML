@@ -7,7 +7,7 @@ def potentialEnergyPerTrio(lengths, E0=1, Rc=1):
     The (simplified) potential energy based on the lengths of the sides of a triangle (a, b and c).
     
     >>> potentialEnergyPerTrio([20, 20, 20])
-    -8.628094085496563e-07
+    0.0
     
     >>> potentialEnergyPerTrio([0.1, 0.6, 1])
     1383087510.7362177
@@ -21,20 +21,27 @@ def potentialEnergyPerTrio(lengths, E0=1, Rc=1):
     >>> potentialEnergyPerTrio([1, 1, 1])
     -13.83088344325057
     """
-    Mc = 1/3
-    A0 = 4
+    Mc = 1 / 3
+    A0 = 1
+    n = 6
+    R = 2 * Rc
     
     a = Mc * lengths[0] / Rc
     b = Mc * lengths[1] / Rc
     c = Mc * lengths[2] / Rc
     
+    circumference = a + b + c
     #s = (a + b + c) / 2
     #area2Triangle = s * (s - a) * (s - b) * (s - c)
     
-    longRangePotential = -((a + b + c)**-10)
-    shortRangePotential = longRangePotential**2
-    
-    return E0 * A0 * (shortRangePotential + longRangePotential)
+    if circumference >= R:
+        return 0.0
+    else:
+        longRangePotential = -2 * (1 / (circumference**n) - 1 / (R**n))
+        shortRangePotential = (1 / (circumference**(2 * n)) - 1 / (R**(2 * n)))
+        correction = -(2 * n / (R**(n + 1))) * (1 - 1/(R**n)) * (circumference - R)
+        
+        return E0 * A0 * (shortRangePotential + longRangePotential + correction)
 
 if __name__ == "__main__":
     import doctest

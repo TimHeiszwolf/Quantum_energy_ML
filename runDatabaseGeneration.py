@@ -19,17 +19,17 @@ from makeRandomDatabase import *
 
 def main():
     # General settings for each method.
-    numberOfDatapoints = 25000
-    numberOfSurroundingCells = 2
+    numberOfDatapoints = 40000
+    numberOfSurroundingCells = 3
     numberOfParticlesPerCell = 4
     numberOfDimensions = 2
     potentialEnergyFunction = potentialEnergyPerTrio# Set the potential energy function of the data base as a function.
-    widthOfCell = [2, 20]# The width of a singe cell.
-    filename = 'databaseFilter_cut0.5_widths73_Width2-20_data25k_CirCirHighO_2sur'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    widthOfCell = [5, 5]# The width of a singe cell.
+    filename = 'databaseModLen_min_cut0.90_widths86_Width5_data40k_3-1sur_epoch30_maxDelta0.1_1'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
     
     # Settings filter and minimum method
-    cutoff = 0.5
-    numberOfWidths = 73
+    cutoff = 0.9
+    numberOfWidths = 1
     
     # Settings minimum method
     amountOfEpochs = 30
@@ -75,17 +75,10 @@ def main():
     ax.plot([100*i/len(x) for i in range(0, len(x))], sortedX)
     ax.set_xlim(0, 100)
     ax.set_yscale('log')
-    ax.set_title('Plot of the energy per particle for each percentile.')
+    ax.set_title(filename + '\n Plot of the energy per particle for each percentile with offset' + str(1.01 * abs(min(x))) + '.')
     ax.set_ylabel('Energy per particle')
     ax.set_xlabel('Percentile')
     plt.show()
-    
-    # Filter the data for the normal historgram.
-    qLow = data['potentialEnergy'].quantile(0.10)
-    qHi  = data['potentialEnergy'].quantile(0.90)
-    dataFiltered = data[(data['potentialEnergy'] < qHi) & (data['potentialEnergy'] > qLow)]
-    x = dataFiltered['potentialEnergy']
-    numBins = 1000
     
     # Making a plot by width of cell
     if typeOfProcces == 'minimum' or typeOfProcces == 'filter':
@@ -99,15 +92,21 @@ def main():
         ax.plot(medianData.index, medianData['potentialEnergy']['95%'])
         plt.legend(['5%', '50%', '95%'])
         ax.set_yscale('log')
-        ax.set_title('Plot of the energy per particle for each width of cell with offset of ' + str(tempOfsett) + '.')
+        ax.set_title(filename + '\n Plot of the energy per particle for each width of cell with offset of ' + str(tempOfsett) + '.')
         ax.set_ylabel('Energy per particle')
         ax.set_xlabel('Width of cell')
         plt.show()
     
     # Make the normal historgram.
+    qLow = data['potentialEnergy'].quantile(0.01)
+    qHi  = data['potentialEnergy'].quantile(0.99)
+    dataFiltered = data[(data['potentialEnergy'] < qHi) & (data['potentialEnergy'] > qLow)]
+    x = dataFiltered['potentialEnergy']
+    numBins = 1000
+    
     fig, ax = plt.subplots(figsize=(8, 8))
     n, bins, patches = ax.hist(x, numBins, facecolor='blue', alpha=0.5)
-    ax.set_title('Histogram of distribution of energy per particle.')
+    ax.set_title(filename + '\n Histogram of distribution of energy per particle.')
     ax.set_xlabel('Energy per particle')
     ax.set_ylabel('Count')
     plt.show()

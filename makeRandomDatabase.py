@@ -45,16 +45,16 @@ def makeRandomDatabase(numberOfDatapoints, numberOfSurroundingCells, numberOfPar
     
     if giveUpdates:
         # Give the user some information and estimates about the amount of calculation and time needed.
-        secondsPerDatapoint = 19 * (10**-6) * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)
+        secondsPerDatapoint = 20 * (10**-6) * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)
         print('Done generating space.')
         print('Predicted amount of calculations:', int(numberOfDatapoints * numberOfCalculationsGeneration(numberOfSurroundingCells, numberOfParticlesPerCell)), 'for', numberOfDatapoints, 'datapoints.')
-        print('Assuming 19 us per calculation, estimated time needed:', math.ceil(numberOfDatapoints * secondsPerDatapoint), 'seconds')
+        print('Assuming 20 us per calculation, estimated time needed:', math.ceil(numberOfDatapoints * secondsPerDatapoint), 'seconds')
         startTime = time.time()
     
     for i in range(0, numberOfDatapoints):
         # Calculate the energy of each datapoint.
         otherSpace = generateSpace(data['particleCoordinates'][i], data['numberOfSurroundingCells'][i], data['widthOfCell'][i])# Generate the other space.
-        data['potentialEnergy'].append(potentialEnergy(otherSpace, data['particleCoordinates'][i], potentialEnergyFunction))# Calculate the potential energy and save it to the data dictonairy.
+        data['potentialEnergy'].append(potentialEnergyPerParticle(otherSpace, data['particleCoordinates'][i], potentialEnergyFunction))# Calculate the potential energy and save it to the data dictonairy.
         
         if giveUpdates:
             print(str(math.ceil(100 * (i + 1) / (numberOfDatapoints))).rjust(3, ' '), '% done, expected time left', math.ceil((numberOfDatapoints - i - 1) * secondsPerDatapoint), 'seconds,', math.ceil(time.time() - startTime), 'seconds since start.')# Inform the user of the progress.
@@ -150,7 +150,7 @@ def makeRandomDatabaseFilter(numberOfDatapoints, numberOfSurroundingCells, numbe
         
         for i in range(0, math.ceil(numberOfDatapoints / numberOfWidths)):
             otherSpace = generateSpace(data['particleCoordinates'][i], data['numberOfSurroundingCells'][i], data['widthOfCell'][i])# Generate the other space.
-            data['potentialEnergy'].append(potentialEnergy(otherSpace, data['particleCoordinates'][i], potentialEnergyFunction))# Calculate the potential energy and save it to the data dictonairy.
+            data['potentialEnergy'].append(potentialEnergyPerParticle(otherSpace, data['particleCoordinates'][i], potentialEnergyFunction))# Calculate the potential energy and save it to the data dictonairy.
             
             if giveUpdates:
                 numberOfCalculationsDone = i + 1 + loopNumber * math.ceil(numberOfDatapoints / numberOfWidths)
@@ -264,30 +264,50 @@ def makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numb
         
         for i in range(0, math.ceil(numberOfDatapoints / numberOfWidths)):
             
+            oldOtherSpace = generateSpace(data['particleCoordinates'][i], descentNumberOfSurroundingCells, data['widthOfCell'][i])
+            oldPotentialEnergy = potentialEnergyPerParticle(oldOtherSpace, data['particleCoordinates'][i], potentialEnergyFunction)
+            
+            changeAccepted = []
+            
             for j in range(amountOfEpochs):
                 # The monte carlo part in which diffrent
+                
                 for particleNumber in range(len(data['particleCoordinates'][i])):
                     newCoordinates = np.copy(data['particleCoordinates'][i])
-                    #newCoordinates[particleNumber] = newCoordinates[particleNumber] + np.array([maxDeltaPerEpoch * random.uniform(-1, 1) for a in range(0, numberOfDimensions)])
-                    direction = random.randint(0, numberOfDimensions - 1)
-                    newCoordinates[particleNumber][direction] = newCoordinates[particleNumber][direction] + maxDeltaPerEpoch * random.uniform(-1, 1)
+                    newCoordinates[particleNumber] = newCoordinates[particleNumber] + np.array([maxDeltaPerEpoch * random.uniform(-1, 1) for a in range(0, numberOfDimensions)])
+                    #direction = random.randint(0, numberOfDimensions - 1)
+                    #newCoordinates[particleNumber][direction] = newCoordinates[particleNumber][direction] + maxDeltaPerEpoch * random.uniform(-1, 1)
                     
-                    oldOtherSpace = generateSpace(data['particleCoordinates'][i], descentNumberOfSurroundingCells, data['widthOfCell'][i])
-                    oldPotentialEnergy = potentialEnergy(oldOtherSpace, data['particleCoordinates'][i], potentialEnergyFunction)
+                    for k in range(len(newCoordinates[particleNumber])):
+                        # Make sure the particle stays in the unit cell.
+                        if newCoordinates[particleNumber][k] < 0:
+                            newCoordinates[particleNumber][k] = newCoordinates[particleNumber][k] +  data['widthOfCell'][i]
+                        elif newCoordinates[particleNumber][k] > data['widthOfCell'][i]:
+                            newCoordinates[particleNumber][k] = newCoordinates[particleNumber][k] -  data['widthOfCell'][i]
                     
                     newOtherSpace = generateSpace(newCoordinates, descentNumberOfSurroundingCells, data['widthOfCell'][i])
-                    newPotentialEnergy = potentialEnergy(oldOtherSpace, newCoordinates, potentialEnergyFunction)
+                    newPotentialEnergy = potentialEnergyPerParticle(oldOtherSpace, newCoordinates, potentialEnergyFunction)
                     
                     if newPotentialEnergy <= oldPotentialEnergy:
                         data['particleCoordinates'][i] = newCoordinates
+                        oldPotentialEnergy = newPotentialEnergy
+                        changeAccepted.append(1)
+                    else:
+                        changeAccepted.append(0)
                     
+                    """
                     if giveUpdates:
                         numberOfCalculationsDone = i + 1 + loopNumber * math.ceil(numberOfDatapoints / numberOfWidths)
                         print(str(math.ceil(100 * numberOfCalculationsDone / totalNumberOfCalculations)).rjust(3, ' '), '% done, expected time left', math.ceil((time.time() - startTime) * (totalNumberOfCalculations - numberOfCalculationsDone) / numberOfCalculationsDone), 'seconds,', math.ceil(time.time() - startTime), 'seconds since start, on width of cell', widthOfCell, 'datapoint', i + 1, 'out of', 1 + math.ceil(numberOfDatapoints / numberOfWidths), 'epoch', j + 1, 'particle', particleNumber, 'a lower energy was found:', newPotentialEnergy <= oldPotentialEnergy)
+                    #"""
             
+            
+            if giveUpdates:
+                numberOfCalculationsDone = i + 1 + loopNumber * math.ceil(numberOfDatapoints / numberOfWidths)
+                print(str(math.ceil(100 * numberOfCalculationsDone / totalNumberOfCalculations)).rjust(3, ' '), '% done, expected time left', math.ceil((time.time() - startTime) * (totalNumberOfCalculations - numberOfCalculationsDone) / numberOfCalculationsDone), 'seconds,', math.ceil(time.time() - startTime), 'seconds since start, on width of cell', widthOfCell, 'datapoint', i + 1, 'out of', 1 + math.ceil(numberOfDatapoints / numberOfWidths), 'epoch', j + 1, 'particle', particleNumber, 'a last 10 acceptance rate was:', 100 * np.mean([changeAccepted[-temp - 1] for temp in range(10)]), '%')
             
             otherSpace = generateSpace(data['particleCoordinates'][i], data['numberOfSurroundingCells'][i], data['widthOfCell'][i])# Generate the other space.
-            data['potentialEnergy'].append(potentialEnergy(otherSpace, data['particleCoordinates'][i], potentialEnergyFunction))# Calculate the potential energy and save it to the data dictonairy.
+            data['potentialEnergy'].append(potentialEnergyPerParticle(otherSpace, data['particleCoordinates'][i], potentialEnergyFunction))# Calculate the potential energy and save it to the data dictonairy.
             
             
             

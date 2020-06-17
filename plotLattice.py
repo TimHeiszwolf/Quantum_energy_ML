@@ -5,7 +5,7 @@ from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
 from generateSpace import *
 
 
-def plotLattice(totalSpace, widthOfCell = 1.0, plotBorders = True):
+def plotLattice(totalSpace, widthOfCell, plotBorders = True):
     """
     Plots the lattice/space in a scatter graph with the grid as cell borders.
     
@@ -17,6 +17,7 @@ def plotLattice(totalSpace, widthOfCell = 1.0, plotBorders = True):
     
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.scatter(x=toPlot[0], y=toPlot[1], marker='o', c='r')
+    #ax.scatter(x=toPlot[1], y=toPlot[0], marker='o', c='r')
     ax.set_title('Position of particles.')
     ax.set_xlabel('x')
     ax.set_ylabel('y')
@@ -37,7 +38,7 @@ def plotLattice(totalSpace, widthOfCell = 1.0, plotBorders = True):
     
     plt.show()
     
-    return ax
+    return fig, ax
 
 
 def plotLatticeFromDataFrame(dataFrame, indexNumber, plotBorders = True):
