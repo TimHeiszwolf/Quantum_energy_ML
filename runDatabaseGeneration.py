@@ -9,30 +9,27 @@ from multiprocessing import Process, Queue
 
 from generateSpace import *
 from plotLattice import *
-from getTriangleLengths import *
-from potentialEnergyPerTrio import *
 from potentialEnergy import *
-from potentialEnergyPerParticle import *
 from numberOfCalculations import *
 from makeRandomDatabase import *
 
 
 def main():
     # General settings for each method.
-    numberOfDatapoints = 40000
+    numberOfDatapoints = 100#2500
     numberOfSurroundingCells = 3
     numberOfParticlesPerCell = 4
     numberOfDimensions = 2
-    potentialEnergyFunction = potentialEnergyPerTrio# Set the potential energy function of the data base as a function.
-    widthOfCell = [5, 5]# The width of a singe cell.
-    filename = 'databaseModLen_min_cut0.90_widths86_Width5_data40k_3-1sur_epoch30_maxDelta0.1_1'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    potentialEnergyFunction = potentialEnergyPerSet# Set the potential energy function of the data base as a function.
+    widthOfCell = [20, 20]# The width of a singe cell.
+    filename = False#'TestEpochsStandardSettings40Epochs'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
     
     # Settings filter and minimum method
     cutoff = 0.9
-    numberOfWidths = 1
+    numberOfWidths = 1#86
     
     # Settings minimum method
-    amountOfEpochs = 30
+    amountOfEpochs = 40#40
     maxDeltaPerEpoch = 0.1
     descentNumberOfSurroundingCells = 1
     
@@ -76,7 +73,7 @@ def main():
     ax.set_xlim(0, 100)
     ax.set_yscale('log')
     ax.set_title(filename + '\n Plot of the energy per particle for each percentile with offset' + str(1.01 * abs(min(x))) + '.')
-    ax.set_ylabel('Energy per particle')
+    ax.set_ylabel('Energy per particle (E/Ec)')
     ax.set_xlabel('Percentile')
     plt.show()
     
@@ -93,8 +90,8 @@ def main():
         plt.legend(['5%', '50%', '95%'])
         ax.set_yscale('log')
         ax.set_title(filename + '\n Plot of the energy per particle for each width of cell with offset of ' + str(tempOfsett) + '.')
-        ax.set_ylabel('Energy per particle')
-        ax.set_xlabel('Width of cell')
+        ax.set_ylabel('Energy per particle (E/Ec)')
+        ax.set_xlabel('Width of cell (r/Rc)')
         plt.show()
     
     # Make the normal historgram.
@@ -107,7 +104,7 @@ def main():
     fig, ax = plt.subplots(figsize=(8, 8))
     n, bins, patches = ax.hist(x, numBins, facecolor='blue', alpha=0.5)
     ax.set_title(filename + '\n Histogram of distribution of energy per particle.')
-    ax.set_xlabel('Energy per particle')
+    ax.set_xlabel('Energy per particle (E/Ec)')
     ax.set_ylabel('Count')
     plt.show()
 

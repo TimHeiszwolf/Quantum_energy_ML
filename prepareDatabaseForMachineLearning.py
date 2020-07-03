@@ -69,6 +69,7 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
                     # Since the matrix is symetric make sure that you don't do the same calculation twice.
                     matrix[i][j] = matrix[j][i]
             
+            #print(matrix)
             eigenvalue, eigenVector = np.linalg.eig(matrix)
             [eigenvaluesRow.append(i) for i in sorted(eigenvalue)]
             #[eigenvaluesRow.append(i) for i in eigenvalue]

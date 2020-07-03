@@ -9,18 +9,15 @@ from multiprocessing import Process, Queue
 
 from generateSpace import *
 from plotLattice import *
-from getTriangleLengths import *
-from potentialEnergyPerTrio import *
 from potentialEnergy import *
-from potentialEnergyPerParticle import *
 from numberOfCalculations import *
 from makeRandomDatabase import *
 from prepareDatabaseForMachineLearning import*
 
 
 def main():
-    filename = 'databaseModLen_min_cut0.90_widths86_Width5_data1k_3-1sur_epoch30_maxDelta0.1_1'#'databaseModLen_min_cut0.90_widths86_Width1.5-10_3-1sur_epoch30_maxDelta0.1_R20_M2M3'# The name of the file which you want to prepare for machine learning.
-    orderOfMatrix = [-2, -3, -4]# The order of the matrices you want to make.
+    filename = 'databasemin_cut0.9_widths1_5-5_25k_3-1_epoch40_maxDelta0.1_AdjustedPotential_M2M3'#'databaseModLen_min_cut0.90_widths86_Width1.5-10_3-1sur_epoch30_maxDelta0.1_R20_M2M3'# The name of the file which you want to prepare for machine learning.
+    orderOfMatrix = [-2, -3]# The order of the matrices you want to make.
     R0 = 20
     
     data = pd.read_json(filename + '.json', orient='columns')

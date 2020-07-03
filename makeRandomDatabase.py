@@ -8,10 +8,7 @@ from multiprocessing import Process, Queue
 
 from generateSpace import *
 from plotLattice import *
-from getTriangleLengths import *
-from potentialEnergyPerTrio import *
 from potentialEnergy import *
-from potentialEnergyPerParticle import *
 from numberOfCalculations import *
 
 
@@ -224,7 +221,7 @@ def makeRandomDatabaseFilterMultiprocessing(numberOfDatapoints, numberOfSurround
 
 
 
-def makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCellRange=[1, 1], filename=False, giveUpdates=True, numberOfDimensions=2, numberOfWidths=100, cutoff=0.5, amountOfEpochs=4, maxDeltaPerEpoch=0.01, descentNumberOfSurroundingCells=2):
+def makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCellRange=[1, 1], filename=False, giveUpdates=True, numberOfDimensions=2, numberOfWidths=100, cutoff=0.5, amountOfEpochs=40, maxDeltaPerEpoch=0.01, descentNumberOfSurroundingCells=2):
     """
     A function that generates a random database of particle configurations and their potential energies.
     
@@ -261,6 +258,8 @@ def makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numb
             for j in range(0, numberOfParticlesPerCell):
                 for k in range(0, math.ceil(numberOfDatapoints / numberOfWidths)):
                     data['particleCoordinates'][k][j][i] = random.uniform(0, data['widthOfCell'][k])
+        
+        totalAcceptedRateLastTen = []
         
         for i in range(0, math.ceil(numberOfDatapoints / numberOfWidths)):
             
@@ -301,10 +300,11 @@ def makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numb
                         print(str(math.ceil(100 * numberOfCalculationsDone / totalNumberOfCalculations)).rjust(3, ' '), '% done, expected time left', math.ceil((time.time() - startTime) * (totalNumberOfCalculations - numberOfCalculationsDone) / numberOfCalculationsDone), 'seconds,', math.ceil(time.time() - startTime), 'seconds since start, on width of cell', widthOfCell, 'datapoint', i + 1, 'out of', 1 + math.ceil(numberOfDatapoints / numberOfWidths), 'epoch', j + 1, 'particle', particleNumber, 'a lower energy was found:', newPotentialEnergy <= oldPotentialEnergy)
                     #"""
             
+            totalAcceptedRateLastTen.append([100 * changeAccepted[-temp - 1] for temp in range(10)])
             
             if giveUpdates:
                 numberOfCalculationsDone = i + 1 + loopNumber * math.ceil(numberOfDatapoints / numberOfWidths)
-                print(str(math.ceil(100 * numberOfCalculationsDone / totalNumberOfCalculations)).rjust(3, ' '), '% done, expected time left', math.ceil((time.time() - startTime) * (totalNumberOfCalculations - numberOfCalculationsDone) / numberOfCalculationsDone), 'seconds,', math.ceil(time.time() - startTime), 'seconds since start, on width of cell', widthOfCell, 'datapoint', i + 1, 'out of', 1 + math.ceil(numberOfDatapoints / numberOfWidths), 'epoch', j + 1, 'particle', particleNumber, 'a last 10 acceptance rate was:', 100 * np.mean([changeAccepted[-temp - 1] for temp in range(10)]), '%')
+                print(str(math.ceil(100 * numberOfCalculationsDone / totalNumberOfCalculations)).rjust(3, ' '), '% done, expected time left', math.ceil((time.time() - startTime) * (totalNumberOfCalculations - numberOfCalculationsDone) / numberOfCalculationsDone), 'seconds,', math.ceil(time.time() - startTime), 'seconds since start, on width of cell', widthOfCell, 'datapoint', i + 1, 'out of', str(math.ceil(numberOfDatapoints / numberOfWidths)) + ', the acceptance rate of the first 16 was:', 100 * np.mean([changeAccepted[temp] for temp in range(16)]), '%', 'the acceptance rate of the last 16 was:', 100 * np.mean([changeAccepted[-temp - 1] for temp in range(16)]), '%')
             
             otherSpace = generateSpace(data['particleCoordinates'][i], data['numberOfSurroundingCells'][i], data['widthOfCell'][i])# Generate the other space.
             data['potentialEnergy'].append(potentialEnergyPerParticle(otherSpace, data['particleCoordinates'][i], potentialEnergyFunction))# Calculate the potential energy and save it to the data dictonairy.
@@ -325,7 +325,7 @@ def makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numb
         
     if giveUpdates:
         endTime = time.time()
-        print('Done generating database. Took :', math.ceil(endTime - startTime), 'seconds.')# Inform the user of how the procces has progressed.
+        print('Done generating database. Took :', math.ceil(endTime - startTime), 'seconds. Average acceptance rate of last 10 epochs out of', amountOfEpochs,'epochs was:', np.mean(totalAcceptedRateLastTen), '+-', np.std(totalAcceptedRateLastTen)/np.sqrt(len(totalAcceptedRateLastTen)), '%.')# Inform the user of how the procces has progressed.
     
     
     finalDataFrame = pd.concat(dataFrames, ignore_index = True, sort = False)

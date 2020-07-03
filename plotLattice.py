@@ -19,8 +19,8 @@ def plotLattice(totalSpace, widthOfCell, plotBorders = True):
     ax.scatter(x=toPlot[0], y=toPlot[1], marker='o', c='r')
     #ax.scatter(x=toPlot[1], y=toPlot[0], marker='o', c='r')
     ax.set_title('Position of particles.')
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
+    ax.set_xlabel('x (x/Rc)')
+    ax.set_ylabel('y (y/Rc)')
     
     ax.set_xlim((0 - min(toPlot[0])%widthOfCell) + min(toPlot[0]), (widthOfCell - max(toPlot[0])%widthOfCell) + max(toPlot[0]))
     ax.set_ylim((0 - min(toPlot[1])%widthOfCell) + min(toPlot[1]), (widthOfCell - max(toPlot[1])%widthOfCell) + max(toPlot[1]))
