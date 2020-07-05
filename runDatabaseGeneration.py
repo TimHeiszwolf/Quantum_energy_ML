@@ -16,42 +16,28 @@ from makeRandomDatabase import *
 
 def main():
     # General settings for each method.
-    numberOfDatapoints = 100#2500
-    numberOfSurroundingCells = 3
+    numberOfDatapoints = 100
     numberOfParticlesPerCell = 4
     numberOfDimensions = 2
     potentialEnergyFunction = potentialEnergyPerSet# Set the potential energy function of the data base as a function.
-    widthOfCell = [20, 20]# The width of a singe cell.
-    filename = False#'TestEpochsStandardSettings40Epochs'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
-    
-    # Settings filter and minimum method
-    cutoff = 0.9
-    numberOfWidths = 1#86
-    
-    # Settings minimum method
-    amountOfEpochs = 40#40
+    widthOfCell = [5, 5]# The width of a singe cell.
+    numberOfWidths = 1
+    depthOfSurroundingCells = 3
+    relaxationDepthOfSurroundingCells = 1
+    amountOfEpochs = 40
     maxDeltaPerEpoch = 0.1
-    descentNumberOfSurroundingCells = 1
+    cutoff = 0.9
+    filename = 'poep'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    
     
     amountOfProcesses = False
     while (not (type(amountOfProcesses) == int)):
         # Keeps asking the user for the amountOfProcesses until it is a int.
         amountOfProcesses = int(input('How many processes should start? (int): '))
     
-    typeOfProcces = 'none'
-    while (not (typeOfProcces == 'filter' or typeOfProcces == 'random' or typeOfProcces == 'minimum')):
-        # Keeps asking the user for the amountOfProcesses until it is a int.
-        typeOfProcces = input('Which method? (Filter/Random/Minimum): ').lower()
+    data = makeRandomDatabaseMinimumMultiprocessing(math.ceil(numberOfDatapoints / cutoff), depthOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, amountOfProcesses, numberOfDimensions, numberOfWidths, cutoff, amountOfEpochs, maxDeltaPerEpoch, relaxationDepthOfSurroundingCells)
+    #data = makeRandomDatabaseMinimum(numberOfDatapoints, depthOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, True, numberOfDimensions, numberOfWidths, cutoff, amountOfEpochs, maxDeltaPerEpoch, relaxationDepthOfSurroundingCells)
     
-    if typeOfProcces == 'filter':
-        data = makeRandomDatabaseFilterMultiprocessing(math.ceil(numberOfDatapoints / cutoff), numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, amountOfProcesses, numberOfDimensions, numberOfWidths, cutoff)
-    elif typeOfProcces == 'random':
-        data = makeRandomDatabaseMultiprocessing(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, amountOfProcesses, numberOfDimensions)
-    elif typeOfProcces == 'minimum':
-        data = makeRandomDatabaseMinimumMultiprocessing(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, amountOfProcesses, numberOfDimensions, numberOfWidths, cutoff, amountOfEpochs, maxDeltaPerEpoch, descentNumberOfSurroundingCells)
-        #data = makeRandomDatabaseMinimum(numberOfDatapoints, numberOfSurroundingCells, numberOfParticlesPerCell, potentialEnergyFunction, widthOfCell, filename, True, numberOfDimensions, numberOfWidths, cutoff, amountOfEpochs, maxDeltaPerEpoch, descentNumberOfSurroundingCells)
-    else:
-        print('You did something wrong, you should be able to see this print.')
     
     print('\n Done generating database now analysing \n')
     print(data.head(), '\n')
@@ -78,7 +64,7 @@ def main():
     plt.show()
     
     # Making a plot by width of cell
-    if typeOfProcces == 'minimum' or typeOfProcces == 'filter':
+    if numberOfWidths>1:
         tempData = dataFiltered.copy()
         tempOfsett = 1.01 * min(tempData['potentialEnergy'])
         tempData['potentialEnergy'] = tempData['potentialEnergy'] - tempOfsett
