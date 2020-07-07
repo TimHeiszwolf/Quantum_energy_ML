@@ -28,7 +28,7 @@ def main():
         # Keeps asking the user for the amountOfProcesses until it is a int.
         amountOfProcesses = int(input('How many processes should start? (int): '))
     
-    data = prepareDatabseForMachineLearningMultiprocessing(data, orderOfMatrix, R0, filename + 'Prepared', amountOfProcesses)
+    data = prepareDatabseForMachineLearningMultiprocessing(data, orderOfMatrix, R0p, filename + 'Prepared', amountOfProcesses)
     
     print('\nDone preparing database now analysing.\n')
     print(data.head(), '\n')

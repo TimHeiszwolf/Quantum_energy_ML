@@ -1,6 +1,6 @@
 # Quantum_energy_ML
  
-This Github repo currently doesn't contain the latest version (that one is currently being cleaned up). Please check back in around sunday July 5th.
+This Github repo currently doesn't contain the latest version (that one is currently being cleaned up). More pre-generated databases are also still being added (but sadly these computations take a long time).
 
 # Code usage
 The code, several databases and a few trained networks can be found on this Github page. More details can be found in the section below. If afterwards you still have questions feel free to contact the author.

@@ -16,7 +16,7 @@ from makeRandomDatabase import *
 
 def main():
     # General settings for each method.
-    numberOfDatapoints = 100
+    numberOfDatapoints = 50
     numberOfParticlesPerCell = 4
     numberOfDimensions = 2
     potentialEnergyFunction = potentialEnergyPerSet# Set the potential energy function of the data base as a function.
