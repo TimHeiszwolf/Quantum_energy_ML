@@ -16,9 +16,9 @@ from makeRandomDatabase import *
 
 def main():
     # General settings for each method.
-    numberOfDatapoints = 50
+    numberOfDatapoints = 50000
     numberOfParticlesPerCell = 4
-    numberOfDimensions = 2
+    numberOfDimensions = 3
     potentialEnergyFunction = potentialEnergyPerSet# Set the potential energy function of the data base as a function.
     widthOfCell = [5, 5]# The width of a singe cell.
     numberOfWidths = 1
@@ -27,7 +27,7 @@ def main():
     amountOfEpochs = 40
     maxDeltaPerEpoch = 0.1
     cutoff = 0.9
-    filename = 'poep'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
+    filename = 'DatabaseMin_1Width5_50k_0.9Cutt_40epochs_0.1max_3ds_1dsDecent_4particles_2D'# Name of the file in which the data will be stored, set to a boolean if you don't want to store the data.
     
     
     amountOfProcesses = False

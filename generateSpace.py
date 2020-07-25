@@ -23,7 +23,7 @@ def generateSpace(coordinatesOfParticles, depthOfSurroundingCells, widthOfCell =
     
     cellCoordinates = [-depthOfSurroundingCells for i in range(dimension)]
     
-    while True:#cellCoordinates[len(cellCoordinates) - 1]<=depthOfSurroundingCells:
+    while True:
         
         for i in range(len(cellCoordinates)):
             if cellCoordinates[i]>depthOfSurroundingCells:

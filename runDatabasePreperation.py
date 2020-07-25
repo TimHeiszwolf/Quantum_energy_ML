@@ -16,7 +16,7 @@ from prepareDatabaseForMachineLearning import*
 
 
 def main():
-    filename = 'databasemin_cut0.9_widths1_5-5_25k_3-1_epoch40_maxDelta0.1_AdjustedPotential_M2M3'#'databaseModLen_min_cut0.90_widths86_Width1.5-10_3-1sur_epoch30_maxDelta0.1_R20_M2M3'# The name of the file which you want to prepare for machine learning.
+    filename = 'DatabaseMin_1Width5_50k_0.9Cutt_40epochs_0.1max_3ds_1dsDecent_4particles_2D'#'databaseModLen_min_cut0.90_widths86_Width1.5-10_3-1sur_epoch30_maxDelta0.1_R20_M2M3'# The name of the file which you want to prepare for machine learning.
     orderOfMatrix = [-2, -3]# The order of the matrices you want to make.
     R0p = 20
     

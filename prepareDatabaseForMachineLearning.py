@@ -14,7 +14,6 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
     orderOfMatrix is a list of the 'order' (power to which the relative distance is taken) for each proximity matrix.
     filename is the name of the file the database get's exported to. The .json file extension get's added in the code itself. If the type of filename is not a string no file will be saved.
     giveUpdates is a boolean which determines if updates about the progress of the database preperation get's printed.
-    
     """
     
     timeStart = time.time()
@@ -26,15 +25,17 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
     for a in range(0, numberOfDatapoints):
         # Loop trough each datapoint
         coordinates = data['particleCoordinates'][a]
+        dimension = len(coordinates[0])
         widthOfCell = data['widthOfCell'][a]
-        numberOfSurroundingCells = math.ceil(R0 / widthOfCell + 1)#data['numberOfSurroundingCells'][a]
+        depthOfSurroundingCells = math.ceil(R0 / widthOfCell + 1)
         
         eigenvaluesRow = []
         relativeDistancesRow = [widthOfCell]
         
         for order in orderOfMatrix:
+            # For each order of eigenvalues wanted a matrix is constructed.
             matrix = np.zeros((len(coordinates), len(coordinates)))
-            relativeDistancesRowOrder = []
+            relativeDistancesRowOrder = []# The relative distances are also calculated and saved.
             
             for i in range(0, len(coordinates)):
                 for j in range(i, len(coordinates)):
@@ -42,26 +43,38 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
                     sumOfProximity = 0
                     
                     if (not i==j):
+                        # This part calculates the relative distance inputs.
                         vectorA = coordinates[i]
                         vectorB = coordinates[j]
                         differenceVector = vectorA - vectorB
                         relativeDistancesRowOrder.append(np.sqrt(differenceVector.dot(differenceVector))**(-order))
                     
-                    for x in range(-numberOfSurroundingCells, numberOfSurroundingCells + 1):
-                        for y in range(-numberOfSurroundingCells, numberOfSurroundingCells + 1):
-                            # Run trough all 'mirror images'.
-                            if i == j and x == 0 and y == 0:
-                                # Prevent self-proximity with the same particle.
-                                continue
-                            
+                    cellCoordinates = [-depthOfSurroundingCells for k in range(dimension)]
+                    
+                    while True:
+                        # The while loop is to make sure that each coordinate in any amount of dimensions is taken into account.
+                        for k in range(len(cellCoordinates)):
+                            if cellCoordinates[k]>depthOfSurroundingCells:
+                                # If a cellCoordinate is large then the depth of the surrounding cells then make it minimal again and increase the next coordinate by one. Thus you will loop trough each possible permutation.
+                                cellCoordinates[k + 1] = cellCoordinates[k + 1] + 1
+                                cellCoordinates[k] = -depthOfSurroundingCells
+                        
+                        if not (i == j and sum([0==cellCoordinate for cellCoordinate in cellCoordinates])==dimension):
+                            # Calculate the addition to the proximity matrix element.
                             vectorA = coordinates[i]
-                            vectorB = coordinates[j] + np.array([x * widthOfCell, y * widthOfCell])
+                            vectorB = coordinates[j] + widthOfCell * np.array(cellCoordinates)# Also take into account the mirror images in the other surrounding cells.
                             differenceVector = vectorA - vectorB
                             distance = np.sqrt(differenceVector.dot(differenceVector))
-                            #sumOfProximity = sumOfProximity + math.pow(differenceVector.dot(differenceVector), (order/2))
+                            
                             if distance < R0:
                                 sumOfProximity = sumOfProximity + ((R0 / distance) - (distance / R0))**(-order)
                         
+                        if sum(cellCoordinates)==dimension*depthOfSurroundingCells:
+                            # If all cell coordinates are maximal the sum of it should be the dimension times the depth of surrounding cells and then the while loop should be stopped.
+                            break
+                        
+                        cellCoordinates[0] = cellCoordinates[0] + 1# Iterate the first cell coordinate.
+                    
                     matrix[i][j] = sumOfProximity
             
             for i in range(0, len(coordinates)):
@@ -69,7 +82,6 @@ def prepareDatabseForMachineLearning(data, orderOfMatrix, R0=100.0, filename = F
                     # Since the matrix is symetric make sure that you don't do the same calculation twice.
                     matrix[i][j] = matrix[j][i]
             
-            #print(matrix)
             eigenvalue, eigenVector = np.linalg.eig(matrix)
             [eigenvaluesRow.append(i) for i in sorted(eigenvalue)]
             #[eigenvaluesRow.append(i) for i in eigenvalue]

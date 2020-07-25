@@ -5,7 +5,7 @@ from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
 from generateSpace import *
 
 
-def plotLattice(totalSpace, widthOfCell, axis = [0, 1], plotBorders = True):
+def plotLattice(totalSpace, widthOfCell, axis=[0, 1], plotBorders = True):
     """
     Plots the lattice/space in a scatter graph with the grid as cell borders.
     
@@ -45,13 +45,14 @@ def plotLattice(totalSpace, widthOfCell, axis = [0, 1], plotBorders = True):
     return fig, ax
 
 
-def plotLatticeFromDataFrame(dataFrame, indexNumber, plotBorders = True):
+def plotLatticeFromDataFrame(dataFrame, indexNumber, axis=[0, 1], plotBorders = True):
     """
     Plots the lattice/space in a scatter graph with the grid as cell borders.
     
     dataFrame is the pandas DataFrame containing all the data (of the entire database).
     indexNumber is the number of the index from the pandas DataFrame which yu want to plot.
+    axis is a list of the two axis allong which the lattice should be ploted. For example [0, 1] is the x and y axis and [0, 2] is the x and z axis.
     plotBorders is a boolean representing wether or not borders of the cells are plotted.
     """
-    space = generateSpace(dataFrame['particleCoordinates'][indexNumber], dataFrame['numberOfSurroundingCells'][indexNumber], dataFrame['widthOfCell'][indexNumber], False)
-    return plotLattice(space, dataFrame['widthOfCell'][indexNumber], plotBorders)
+    space = generateSpace(dataFrame['particleCoordinates'][indexNumber], dataFrame['depthOfSurroundingCells'][indexNumber], dataFrame['widthOfCell'][indexNumber], False)
+    return plotLattice(space, dataFrame['widthOfCell'][indexNumber], axis, plotBorders)

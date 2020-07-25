@@ -69,12 +69,10 @@ def potentialEnergy(otherSpace, particles, potentialEnergyFunction):
     
     return potentialEnergyTotal
 
+
 def getLengths(vectors):
     """
     Gets the lengths of the sides of the triangles based on the vectors pointing towards each of the vertices.
-    
-    >>> getLengths([np.array([1,1]), np.array([2,-5]) ,np.array([0.4,3]]))
-    [6.082762530298219, 2.08806130178211, 8.158431221748456]
     """
     lengths = []
     
@@ -93,10 +91,9 @@ def potentialEnergyPerParticle(otherSpace, atoms, potentialEnergyFunction):
     return potentialEnergy(otherSpace, atoms, potentialEnergyFunction) / len(atoms)#len(atoms)#(len(otherSpace) + len(atoms))
 
 
-
 def potentialEnergyPerSet(lengths, E0=1, Rc=1):
     """
-    The (simplified) potential energy based on the lengths of the sides of a triangle (a, b and c).
+    The (simplified) potential energy based on the lengths of the sides of a triangle (a, b and c). See the report for details.
     """
     n = 6
     R = 2 * Rc
@@ -117,12 +114,3 @@ def potentialEnergyPerSet(lengths, E0=1, Rc=1):
         correction = -(2 * n / (R**(n + 1))) * (1 - 1/(R**n)) * (semiCircumference - R)
         
         return E0 * (shortRangePotential + longRangePotential + correction)
-
-
-
-
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

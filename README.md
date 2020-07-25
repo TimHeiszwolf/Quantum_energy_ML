@@ -1,6 +1,8 @@
 # Quantum_energy_ML
- 
-This Github repo currently doesn't contain the latest version (that one is currently being cleaned up). More pre-generated databases are also still being added (but sadly these computations take a long time).
+
+This project was made as the BEP (bachlor end project) of Tim Heiszwolf for his bachlor of Applied Physics at the University of Technology Eindhoven with Vianney Koelman (from the Center for Computational Energy Research) as the supervisor. The corresponding report can be found on this GitHub page and [the presentation can be found on Youtube](https://youtu.be/UqInpamO7As) (and the slides including script on this page). If you have any question or need help when using the code or understanding the porject I would love to help. So do contact me (for example on [timheiszwolf.com](timheiszwolf.com) or by email)!
+
+In the fields of physics and chemistry, potential energy surfaces are used for simulation of the properties and applications of materials. But sadly, the calculation of these potential energy surfaces (or their associated forces) takes a very long time (around 10 minutes for 20 particles), and scales badly ($\mathcal{O}(N^3)$ where $N$ is the amount of particles). With machine learning, a bit of accuracy can be sacrificed to render these calculations many orders of magnitude faster. In this thesis, a framework for generating databases for the training of these neural networks using a toy model will be presented, and a small investigation into machine learning will be done. The advantage of using a toy model is that the making of a (large) database can be significantly than calculating it using other methods.
 
 # Code usage
 The code, several databases and a few trained networks can be found on this Github page. More details can be found in the section below. If afterwards you still have questions feel free to contact the author.
@@ -21,8 +23,8 @@ The available setting are:
 * numberOfWidths: The number of steps widths represented in the database (including the lower and upper endpoints).
 * depthOfSurroundingCells ($d_s$): The depth of the number of cells taken into account when calculating the potential energy. This needs to be high enough such that convergence has taken place (for each possible cell size).
 * relaxationDepthOfSurroundingCells: The depth of the number of cells taken into account when calculating the potential energy for the relaxation process. It is best to make this values lower than numberOfWidths since accuracy is less important and speed is more important.
-* amountOfEpochs: Is the amount of epochs the relaxation process is applied. During a epoch every particle is allowed to move in a random direction and the change is accepted if the new potential energy is lower than the original.
-* maxDeltaPerEpoch: Is the maximum magnitude of the movement of a particle during a epoch. The actual amount is random between this and 0.
+* amountOfScans: Is the amount of scans the relaxation process is applied. During a scan every particle is allowed to move in a random direction and the change is accepted if the new potential energy is lower than the original.
+* maxDeltaPerScan: Is the maximum magnitude of the movement of a particle during a scan. The actual amount is random between this and 0.
 * cutoff: Is above which percentile the energies will be cuttoff and the configurations won't be taken into the database.
 * filename: Is the name of the .json while to which the database will be saved (without the file extension).
 
